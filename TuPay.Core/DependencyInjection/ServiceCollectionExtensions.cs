@@ -21,5 +21,6 @@ public static class ServiceCollectionExtensions
 			})
 			.Services
 			.AddPaymentClient()
-			.AddTransient<TuPayHasher>();
+			.AddTransient<TuPayHasher>()
+			.AddSingleton<TuPaySerializer>();
 }

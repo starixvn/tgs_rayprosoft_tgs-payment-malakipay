@@ -28,4 +28,27 @@ public class HashTests
 		Assert.AreEqual(32, actual.Length);
 		Assert.AreEqual(expected, actual);
 	}
+
+	[TestMethod]
+	public void Callback_Data_HashTest()
+	{
+		var dict = new Dictionary<string, string>
+		{
+			["amount"] = "100",
+			["endtime"] = "2022-03-22 10:03:09",
+			["outtradeno"] = "ab359aa9-1542-451d-8db4-8261eb9b85c7",
+			["ramount"] = "99.53",
+			["remark"] = string.Empty,
+			["status"] = "1",
+			["tradeno"] = "8a89ddcaf6f542fd9ac15b9011c844dd"
+		};
+
+		var sut = new TuPayHasher(NullLogger<TuPayHasher>.Instance);
+
+		var expected = "477cd77b07c18050322228e06693b649";
+
+		var actual = sut.ComputeHash("28ac492de45f44ccb7b7d700e5a82928", dict);
+
+		Assert.AreEqual(expected, actual);
+	}
 }

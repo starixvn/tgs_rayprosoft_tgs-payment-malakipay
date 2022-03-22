@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Tgs.Payment.TuPay;
 
-internal class TuPayHasher
+public class TuPayHasher
 {
 	private readonly ILogger<TuPayHasher> _logger;
 

@@ -32,6 +32,6 @@ public class ClientTest
 			Guid.NewGuid(),
 			new Uri("https://tgs.com/tupay/deposit/callback"));
 
-		var actual = await sut.DepositAsync(merchant, secret, request);
+		_ = await sut.DepositAsync(merchant, secret, request);
 	}
 }
