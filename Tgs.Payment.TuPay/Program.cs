@@ -17,7 +17,8 @@ builder.Services
 		.AddProcessorByType(
 			ProcessorTypes.DepositProcessorType,
 			"tgs.payment.tupay.deposit",
-			"tgs.payment.tupay.deposit"));
+			"tgs.payment.tupay.deposit"))
+	.AddNatsGlobPatternExchange("*");
 
 builder.Services
 	.AddHttpLogging(logging =>
