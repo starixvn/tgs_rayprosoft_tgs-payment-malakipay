@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Tgs.Payment.TuPay;
 
@@ -7,7 +8,8 @@ public class TuPaySerializer
 	private readonly JsonSerializerOptions _jsonSerializerOptions = new()
 	{
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-		WriteIndented = false
+		WriteIndented = false,
+		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
 	};
 
 	public T? Deserialize<T>(string json)

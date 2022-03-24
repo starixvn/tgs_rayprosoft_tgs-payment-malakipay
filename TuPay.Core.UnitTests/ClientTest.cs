@@ -34,4 +34,33 @@ public class ClientTest
 
 		_ = await sut.DepositAsync(merchant, secret, request);
 	}
+
+	[TestMethod]
+	public async Task WithdrawTest()
+	{
+		var httpClient = new HttpClient
+		{
+			BaseAddress = new Uri("https://www.tupay168.com")
+		};
+
+		var sut = new TuPayClient(
+			httpClient,
+			new TuPayHasher(NullLogger<TuPayHasher>.Instance),
+			NullLogger<TuPayClient>.Instance);
+
+		var merchant = "2e2e51902ca34026915b59be8623efec";
+		var secret = "28ac492de45f44ccb7b7d700e5a82928";
+
+		var request = new TuPayClientWithdrawOrder(
+			200M,
+			"BANGKOK BANK PUBLIC COMPANY LTD.",
+			null,
+			"11111111111",
+			"Tester",
+			new Uri("https://tgs.com/tupay/withdraw/callback"),
+			Guid.NewGuid(),
+			null);
+
+		_ = await sut.WithdrawAsync(merchant, secret, request);
+	}
 }

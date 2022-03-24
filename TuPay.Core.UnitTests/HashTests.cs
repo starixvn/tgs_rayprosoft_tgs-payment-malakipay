@@ -51,4 +51,28 @@ public class HashTests
 
 		Assert.AreEqual(expected, actual);
 	}
+
+	[TestMethod]
+	public void Withdraw_Data_HashTest()
+	{
+		var dict = new Dictionary<string, string>
+		{
+			["amount"] = "123.45",
+			["merchant"] = "2e2e51902ca34026915b59be8623efec",
+			["bankname"] = "BANGKOK BANK PUBLIC COMPANY LTD.",
+			["cardno"] = "11111111111",
+			["cardname"] = "Tester",
+			["notifyurl"] = "https://tgs.com/tupay/withdraw/callback",
+			["outtransferno"] = "48db066a-e73c-4940-8bde-eec01e075d7e",
+			["remark"] = string.Empty,
+		};
+
+		var sut = new TuPayHasher(NullLogger<TuPayHasher>.Instance);
+
+		var expected = "ef94ee40f4733c1aa46016895c8b181a";
+
+		var actual = sut.ComputeHash("28ac492de45f44ccb7b7d700e5a82928", dict);
+
+		Assert.AreEqual(expected, actual);
+	}
 }

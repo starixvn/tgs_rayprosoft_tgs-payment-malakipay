@@ -19,8 +19,8 @@ public class TuPayHasher
 	{
 		var content = string.Join(
 			"&",
-			dict.OrderBy(p => p.Key)
-				.Select(p => $"{p.Key}={HttpUtility.UrlEncode(p.Value?.ToString() ?? string.Empty)}"));
+			dict.OrderBy(kvp => kvp.Key)
+				.Select(p => $"{p.Key}={HttpUtility.UrlEncode(p.Value?.ToString() ?? string.Empty).ToLower()}"));
 
 		var fullText = $"{content}&secret={secret}";
 
