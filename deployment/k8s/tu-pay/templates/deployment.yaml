@@ -59,6 +59,11 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          volumeMounts:
+            - mountPath: /config/appsettings.json
+              name: appsettings
+              readOnly: true
+              subPath: appsettings.json
           livenessProbe:
             httpGet:
               path: /healthz
@@ -71,6 +76,10 @@ spec:
             failureThreshold: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: appsettings
+          configMap:
+            name: configmap-{{ include "tu-pay.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
