@@ -101,7 +101,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: env.k8s_config]) {
 
-                        def resources = getResources(env.k8s_config, env.kube_ns, "payment-skypay")
+                        def resources = getResources(env.k8s_config, env.kube_ns, "payment-tupay")
                         def dedicated = getTgsSettings(env.k8s_config, env.kube_ns, "dedicated")
                         def node_selector = getTgsSettings(env.k8s_config, env.kube_ns, "node-selector")
 
@@ -112,7 +112,7 @@ pipeline {
                         sh '''
                             cat << EOF | yq e -P | helm template deployment/k8s/tu-pay \
                                 -n ${kube_ns} \
-                                --name-template tgs
+                                --name-template tgs \
                                 --set image.tag=${TAG} \
                                 -f -
                             {
@@ -125,7 +125,7 @@ pipeline {
                             cat << EOF | yq e -P | helm template deployment/k8s/tu-pay \
                                 -n ${kube_ns} \
                                 --set image.tag=${TAG} \
-                                --name-template tgs
+                                --name-template tgs \
                                 -f - \
                                 | kubectl -n ${kube_ns} apply -f -
                             {
