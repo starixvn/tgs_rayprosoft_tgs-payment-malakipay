@@ -1,15 +1,22 @@
-﻿{
-	"profiles": {
-		"Tgs.Payment.TuPay": {
-			"commandName": "Project",
-			"dotnetRunMessages": true,
-			"launchBrowser": true,
-			"applicationUrl": "https://localhost:7055;http://+:5055",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"OTEL_SERVICE_NAME": "Payment-TuPay(local)",
-				"NODE_IP": "otel.rpgp.cc"
-			}
-		}
-	}
+{
+  "profiles": {
+    "Tgs.Payment.TuPay": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "OTEL_SERVICE_NAME": "Payment-TuPay(local)",
+        "NODE_IP": "otel.rpgp.cc"
+      },
+      "applicationUrl": "https://localhost:7055;http://+:5055",
+      "dotnetRunMessages": true
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  }
 }

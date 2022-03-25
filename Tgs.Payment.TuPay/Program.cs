@@ -75,26 +75,32 @@ builder.Services
 			|| !httpContext.Request.Path.StartsWithSegments("/swagger")
 			&& !httpContext.Request.Path.StartsWithSegments("/healthz")
 			&& !httpContext.Request.Path.StartsWithSegments("/metrics")
-			&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
 			&& !new[] { "html", "ico", "png", "jpg" }.Any(
-				ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
-	.AddProfileViewer();
+				ext => httpContext.Request.Path.Value.EndsWith($".{ext}")));
+
+builder.Services
+	.AddHealthChecks();
 
 var app = builder.Build();
 
 app.UseHttpLogging();
 
 app.MapControllers();
-app.MapProfileViewer();
-app.MapGet("/", () => "Hello World!");
+app.MapHealthChecks("/healthz");
 
 app.Use(async (context, next) =>
 {
 	await next().ConfigureAwait(false);
 
-	using var stream = new StreamReader(context.Request.Body);
+	var logger = context.RequestServices.GetService<ILoggerFactory>()
+		?.CreateLogger("Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware");
 
-	_ = await stream.ReadToEndAsync().ConfigureAwait(false);
+	if (logger?.IsEnabled(LogLevel.Information) == true)
+	{
+		using var stream = new StreamReader(context.Request.Body);
+
+		_ = await stream.ReadToEndAsync().ConfigureAwait(false);
+	}
 });
 
 app.Run();

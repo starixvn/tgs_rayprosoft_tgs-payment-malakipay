@@ -7,9 +7,12 @@
 		<RootNamespace>Tgs.Payment.TuPay</RootNamespace>
 		<LangVersion>10</LangVersion>
 		<PackageId>Tgs.Payment.TuPay.Client</PackageId>
-		<Version>0.0.1</Version>
+		<Version>0.0.5</Version>
 		<Authors>Raypro</Authors>
 		<Product>Tgs.Payment.TuPay.Client</Product>
+		<PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-payment-tupay</PackageProjectUrl>
+		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-payment-tupay.git</RepositoryUrl>
+		<PackageTags>tgs payment tupay</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>

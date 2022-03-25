@@ -10,13 +10,8 @@ builder.ConfigureServices(services =>
 {
 	_ = services
 		.AddMessageQueue()
-		.AddNatsMessageQueue(natsConfig =>
-		{
-			natsConfig.ConfigQueueOptions((natsOpt, _) =>
-			{
-				natsOpt.Url = "nats://localhost:44222";
-			});
-		})
+		.AddNatsMessageQueue(natsConfig => natsConfig
+			.ConfigQueueOptions((natsOpt, _) => natsOpt.Url = "nats://localhost:44222"))
 		.AddNatsGlobPatternExchange("*");
 
 	_ = services
