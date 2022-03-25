@@ -5,9 +5,9 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
 ARG BuildConfiguration=Release
 RUN --mount=type=secret,id=nuget,dst=/pat cp /pat ~/.nuget/NuGet/NuGet.Config
-WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["Tgs.Payment.TuPay/Tgs.Payment.TuPay.csproj", "Tgs.Payment.TuPay/"]
 COPY ["TuPay.Core/TuPay.Core.csproj", "TuPay.Core/"]
