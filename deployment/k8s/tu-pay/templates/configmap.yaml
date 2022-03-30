@@ -12,3 +12,17 @@ data:
         "PaymentServiceBaseUrl": "http://payment-api"
       },
     }
+  monitor.settings.json: |
+    {
+      "Logging":{
+        "Console": {
+          "FormatterName": "json"
+        },
+        "LogLevel": {
+          "Default": "Warning",
+          "Microsoft": "Warning",
+          "Microsoft.Diagnostics": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information"
+        }
+      }
+    }
