@@ -10,7 +10,7 @@ data:
     {
       "TuPay": {
         "PaymentServiceBaseUrl": "http://payment-api"
-      },
+      }
     }
   monitor.settings.json: |
     {
