@@ -74,7 +74,7 @@ public class DepositController : ControllerBase
 			await paymentClient.ApproveDepositAsync(
 				depositForm.Id,
 				depositForm.BrandId,
-				null).ConfigureAwait(false);
+				paymentReturn.ReceivedAmount).ConfigureAwait(false);
 		}
 
 		return "success";
