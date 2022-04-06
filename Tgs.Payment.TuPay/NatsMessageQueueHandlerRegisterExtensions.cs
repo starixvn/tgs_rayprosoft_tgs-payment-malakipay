@@ -1,6 +1,6 @@
 ﻿using Tgs.MessageQueue.Nats.Configuration;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
 internal static class NatsMessageQueueHandlerRegisterExtensions
 {

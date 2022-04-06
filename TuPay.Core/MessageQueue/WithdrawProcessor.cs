@@ -4,17 +4,17 @@ using Tgs.MessageQueue;
 using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
 
-namespace Tgs.Payment.TuPay.MessageQueue;
+namespace Tgs.Payment.MalakiPay.MessageQueue;
 
 internal class WithdrawProcessor : IMessageProcessor
 {
-	private readonly TuPaySerializer _tuPaySerializer;
+	private readonly MalakiPaySerializer _tuPaySerializer;
 	private readonly TuPayClient _tuPayClient;
 	private readonly IPaymentClient _paymentClient;
 	private readonly TuPayOptions _options;
 
 	public WithdrawProcessor(
-		TuPaySerializer tuPaySerializer,
+		MalakiPaySerializer tuPaySerializer,
 		IOptions<TuPayOptions> tuPayOptionsAccessor,
 		TuPayClient tuPayClient,
 		IPaymentClient paymentClient)
@@ -28,7 +28,7 @@ internal class WithdrawProcessor : IMessageProcessor
 	public async ValueTask<ReadOnlyMemory<byte>> HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
 	{
 		var request = WithdrawRequest.Parser.ParseFrom(data.Span);
-		var settings = _tuPaySerializer.Deserialize<TuPayWithdrawSettings>(request.ApplyInfo)!;
+		var settings = _tuPaySerializer.Deserialize<MalakiPayWithdrawSettings>(request.ApplyInfo)!;
 
 		var order = new TuPayClientWithdrawOrder(
 			decimal.Parse(request.Amount),
@@ -55,9 +55,9 @@ internal class WithdrawProcessor : IMessageProcessor
 			return specifyDate;
 		}
 
-		var applyInfo = new TuPayWithdrawApplyInfo(
+		var applyInfo = new MalakiPayWithdrawApplyInfo(
 			settings,
-			new TuPayWithdrawResponse(
+			new MalakiPayWithdrawResponse(
 				remoteInfo.TransferNo,
 				remoteInfo.TradeAmount,
 				remoteInfo.TransferAmount,

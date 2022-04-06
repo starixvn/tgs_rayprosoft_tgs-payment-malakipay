@@ -1,6 +1,6 @@
 ﻿using Tgs.Payment.Clients;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
 public record DepositForm(
 	Guid Id,
@@ -9,5 +9,5 @@ public record DepositForm(
 	Guid BrandPaymentId,
 	decimal Amount,
 	PaymentFlowState Status,
-	TuPayDepositApplyInfo? ApplyInfo,
+	MalakiPayDepositApplyInfo? ApplyInfo,
 	string? PaymentReturn = null);

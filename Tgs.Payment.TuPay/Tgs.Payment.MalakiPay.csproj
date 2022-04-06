@@ -24,11 +24,13 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9" />
 		<PackageReference Include="ProfileViewer.OpenTelemetry.Exporter" Version="0.2.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.0" />
 		<PackageReference Include="Tgs.MessageQueue.Nats" Version="2.0.3" />
+		<PackageReference Include="Tgs.WebApi.Toolkits" Version="0.0.12-alpha" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\TuPay.Core\TuPay.Core.csproj" />
+		<ProjectReference Include="..\TuPay.Core\MalakiPay.Core.csproj" />
 	</ItemGroup>
 
 </Project>

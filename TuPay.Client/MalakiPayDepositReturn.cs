@@ -1,6 +1,6 @@
-﻿namespace Tgs.Payment.TuPay;
+﻿namespace Tgs.Payment.MalakiPay;
 
-public record TuPayDepositReturn(
+public record MalakiPayDepositReturn(
 	string TradeNo,
 	Guid OutTradeNo,
 	decimal Amount,

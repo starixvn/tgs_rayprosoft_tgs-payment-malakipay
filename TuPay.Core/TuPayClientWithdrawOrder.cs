@@ -1,4 +1,4 @@
-﻿namespace Tgs.Payment.TuPay;
+﻿namespace Tgs.Payment.MalakiPay;
 
 public record TuPayClientWithdrawOrder(
 	decimal Amount,

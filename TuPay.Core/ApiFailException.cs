@@ -1,4 +1,4 @@
-﻿namespace Tgs.Payment.TuPay;
+﻿namespace Tgs.Payment.MalakiPay;
 
 public class ApiFailException : Exception
 {

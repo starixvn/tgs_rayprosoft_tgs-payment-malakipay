@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
-using Tgs.Payment.TuPay;
+using Tgs.Payment.MalakiPay;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +10,8 @@ public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddTuPay(
 		this IServiceCollection services,
-		Action<TuPayOptions, IServiceProvider> configure)
+		Action<TuPayOptions, IServiceProvider> configure,
+		Func<IServiceProvider, DelegatingHandler> httpClientMessageHandlerFactory)
 		=> services
 			.AddOptions<TuPayOptions>()
 			.Configure(configure)
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtensions
 
 				httpClient.BaseAddress = options.PaymentApiUrl;
 			})
+			.AddHttpMessageHandler(httpClientMessageHandlerFactory)
 			.Services
 			.RegisterAllServiceUtilityTypes(Assembly.GetExecutingAssembly(), ServiceLifetime.Transient)
 			.AddPaymentClient()
@@ -40,5 +42,5 @@ public static class ServiceCollectionExtensions
 				};
 			})
 			.AddTransient<TuPayHasher>()
-			.AddSingleton<TuPaySerializer>();
+			.AddSingleton<MalakiPaySerializer>();
 }

@@ -1,4 +1,4 @@
-﻿namespace Tgs.Payment.TuPay.MessageQueue;
+﻿namespace Tgs.Payment.MalakiPay.MessageQueue;
 
 public static class ProcessorTypes
 {

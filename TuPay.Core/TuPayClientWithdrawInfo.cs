@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
 internal class TuPayClientWithdrawInfo
 {

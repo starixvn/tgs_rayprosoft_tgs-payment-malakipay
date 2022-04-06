@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tgs.Payment.Clients;
-using Tgs.Payment.TuPay.ApplicationServices;
 using Tgs.ServiceUtility;
+using Tgs.Payment.MalakiPay.ApplicationServices;
+using Tgs.Payment.MalakiPay;
 
-namespace Tgs.Payment.TuPay.Controllers;
+namespace Tgs.Payment.MalakiPay.Controllers;
 
 [Route("[controller]")]
 [ApiController]
@@ -21,7 +22,7 @@ public class WithdrawController : ControllerBase
 		[FromServices] TuPayHasher hasher,
 		[FromServices] IGetService<GetWithdrawFormQuery, WithdrawForm?> getFormService,
 		[FromServices] IPaymentServiceClient paymentServiceClient,
-		[FromServices] TuPaySerializer serializer,
+		[FromServices] MalakiPaySerializer serializer,
 		[FromForm] IFormCollection formData)
 	{
 		static DateTime? ConvertToSystemDate(string date)
@@ -37,7 +38,7 @@ public class WithdrawController : ControllerBase
 			return specifyDate;
 		}
 
-		var paymentReturn = new TuPayWithdrawReturn(
+		var paymentReturn = new MalakiPayWithdrawReturn(
 			formData["transferno"],
 			Guid.Parse(formData["outtransferno"]),
 			decimal.Parse(formData["tradeamount"]),

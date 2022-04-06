@@ -3,8 +3,8 @@ using OpenTelemetry.Exporter;
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Tgs.Payment.TuPay;
-using Tgs.Payment.TuPay.MessageQueue;
+using Tgs.Payment.MalakiPay;
+using Tgs.Payment.MalakiPay.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,20 +30,23 @@ builder.Services
 	.AddControllers();
 
 builder.Services
-	.AddTuPay((options, _) => builder.Configuration
-		.GetSection("TuPay")
-		.Bind(options))
+	.AddHttpClientLoggingHandler()
+	.AddTuPay(
+		(options, _) => builder.Configuration
+			.GetSection("TuPay")
+			.Bind(options),
+		sp => sp.ResolveLoggingHandler<TuPayOptions>())
 	.AddMessageQueue()
 	.AddNatsMessageQueue(natsConfig => natsConfig
 		.ConfigQueueOptions((options, _) => options.Url = builder.Configuration.GetConnectionString("Nats"))
 		.AddProcessorByType(
 			ProcessorTypes.DepositProcessorType,
-			"tgs.payment.tupay.deposit",
-			"tgs.payment.tupay.deposit")
+			"tgs.payment.malakipay.deposit",
+			"tgs.payment.malakipay.deposit")
 		.AddProcessorByType(
 			ProcessorTypes.WithdrawProcessorType,
-			"tgs.payment.tupay.withdraw",
-			"tgs.payment.tupay.withdraw"))
+			"tgs.payment.malakipay.withdraw",
+			"tgs.payment.malakipay.withdraw"))
 	.AddNatsGlobPatternExchange("*");
 
 builder.Services

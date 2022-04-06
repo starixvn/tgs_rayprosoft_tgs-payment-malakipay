@@ -1,6 +1,6 @@
-﻿namespace Tgs.Payment.TuPay;
+﻿namespace Tgs.Payment.MalakiPay;
 
-public record TuPayWithdrawReturn(
+public record MalakiPayWithdrawReturn(
 	string TransferNo,
 	Guid FormId,
 	decimal TradeAmount,

@@ -1,6 +1,6 @@
-﻿namespace Tgs.Payment.TuPay;
+﻿namespace Tgs.Payment.MalakiPay;
 
-public record TuPayWithdrawSettings(
+public record MalakiPayWithdrawSettings(
 	string Merchant,
 	string Secret,
 	string BankName,

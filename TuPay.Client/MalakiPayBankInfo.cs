@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
-public class TuPayBankInfo
+public class MalakiPayBankInfo
 {
 	[JsonPropertyName("bankName")]
 	public string BankName { get; init; } = default!;

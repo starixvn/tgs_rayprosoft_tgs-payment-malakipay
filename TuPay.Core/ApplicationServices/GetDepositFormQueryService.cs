@@ -1,14 +1,14 @@
 ﻿using Tgs.Payment.Clients;
 using Tgs.ServiceUtility;
 
-namespace Tgs.Payment.TuPay.ApplicationServices;
+namespace Tgs.Payment.MalakiPay.ApplicationServices;
 
 internal class GetDepositFormQueryService : IGetService<GetDepositFormQuery, DepositForm?>
 {
 	private readonly IPaymentServiceClient _paymentServiceClient;
-	private readonly TuPaySerializer _tuPaySerializer;
+	private readonly MalakiPaySerializer _tuPaySerializer;
 
-	public GetDepositFormQueryService(IPaymentServiceClient paymentServiceClient, TuPaySerializer tuPaySerializer)
+	public GetDepositFormQueryService(IPaymentServiceClient paymentServiceClient, MalakiPaySerializer tuPaySerializer)
 	{
 		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
 		_tuPaySerializer = tuPaySerializer ?? throw new ArgumentNullException(nameof(tuPaySerializer));
@@ -31,7 +31,7 @@ internal class GetDepositFormQueryService : IGetService<GetDepositFormQuery, Dep
 				data.Status,
 				string.IsNullOrEmpty(data.ApplyInfo)
 					? null
-					: _tuPaySerializer.Deserialize<TuPayDepositApplyInfo>(data.ApplyInfo),
+					: _tuPaySerializer.Deserialize<MalakiPayDepositApplyInfo>(data.ApplyInfo),
 				data.PaymentReturn);
 	}
 }

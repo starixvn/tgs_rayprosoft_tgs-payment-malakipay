@@ -4,7 +4,7 @@ using System.Text;
 using System.Web;
 using Microsoft.Extensions.Logging;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
 public class TuPayHasher
 {

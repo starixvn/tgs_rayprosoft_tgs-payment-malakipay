@@ -1,14 +1,14 @@
 ﻿using Tgs.Payment.Clients;
 using Tgs.ServiceUtility;
 
-namespace Tgs.Payment.TuPay.ApplicationServices;
+namespace Tgs.Payment.MalakiPay.ApplicationServices;
 
 internal class GetWithdrawFormQueryService : IGetService<GetWithdrawFormQuery, WithdrawForm?>
 {
 	private readonly IPaymentServiceClient _paymentServiceClient;
-	private readonly TuPaySerializer _tuPaySerializer;
+	private readonly MalakiPaySerializer _tuPaySerializer;
 
-	public GetWithdrawFormQueryService(IPaymentServiceClient paymentServiceClient, TuPaySerializer tuPaySerializer)
+	public GetWithdrawFormQueryService(IPaymentServiceClient paymentServiceClient, MalakiPaySerializer tuPaySerializer)
 	{
 		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
 		_tuPaySerializer = tuPaySerializer ?? throw new ArgumentNullException(nameof(tuPaySerializer));
@@ -33,7 +33,7 @@ internal class GetWithdrawFormQueryService : IGetService<GetWithdrawFormQuery, W
 				data.BankInfoId,
 				string.IsNullOrEmpty(data.ApplyInfo)
 					? null
-					: _tuPaySerializer.Deserialize<TuPayWithdrawApplyInfo>(data.ApplyInfo),
+					: _tuPaySerializer.Deserialize<MalakiPayWithdrawApplyInfo>(data.ApplyInfo),
 				data.PaymentReturn);
 	}
 }

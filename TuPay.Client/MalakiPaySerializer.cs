@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
-public class TuPaySerializer
+public class MalakiPaySerializer
 {
 	private readonly JsonSerializerOptions _jsonSerializerOptions = new()
 	{

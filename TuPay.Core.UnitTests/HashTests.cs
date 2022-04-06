@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tgs.Payment.TuPay;
+using Tgs.Payment.MalakiPay;
 
-namespace TuPay.Core.UnitTests;
+namespace MalakiPay.Core.UnitTests;
 
 [TestClass]
 public class HashTests

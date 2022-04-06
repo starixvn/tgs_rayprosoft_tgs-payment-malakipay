@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.Payment.TuPay", "Tgs.Payment.TuPay\Tgs.Payment.TuPay.csproj", "{67DC06B6-0185-412D-BFDB-983D1CD52527}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.Payment.MalakiPay", "Tgs.Payment.TuPay\Tgs.Payment.MalakiPay.csproj", "{67DC06B6-0185-412D-BFDB-983D1CD52527}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuPay.Core", "TuPay.Core\TuPay.Core.csproj", "{F529AFAB-3AF0-4A73-A035-314B5A0BE267}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MalakiPay.Core", "TuPay.Core\MalakiPay.Core.csproj", "{F529AFAB-3AF0-4A73-A035-314B5A0BE267}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuPay.Core.UnitTests", "TuPay.Core.UnitTests\TuPay.Core.UnitTests.csproj", "{08413AF8-4813-4C72-AD3A-F7F46DC7A4E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MalakiPay.Core.UnitTests", "TuPay.Core.UnitTests\MalakiPay.Core.UnitTests.csproj", "{08413AF8-4813-4C72-AD3A-F7F46DC7A4E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuPay.Client", "TuPay.Client\TuPay.Client.csproj", "{E6D127B6-5265-4CBB-8A9D-C25756373D98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MalakiPay.Client", "TuPay.Client\MalakiPay.Client.csproj", "{E6D127B6-5265-4CBB-8A9D-C25756373D98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TuPayTest", "TuPayTest\TuPayTest.csproj", "{7C577642-C6FB-4D5C-98EA-AB8F3E9D7461}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MalakiPayTest", "TuPayTest\MalakiPayTest.csproj", "{7C577642-C6FB-4D5C-98EA-AB8F3E9D7461}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BCDF8B1B-2377-4628-8CCF-224A542191D3}"
 	ProjectSection(SolutionItems) = preProject

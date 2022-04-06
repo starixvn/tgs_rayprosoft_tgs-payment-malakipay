@@ -3,15 +3,15 @@ using Microsoft.Extensions.Options;
 using Tgs.MessageQueue;
 using Tgs.Payment.Protos;
 
-namespace Tgs.Payment.TuPay.MessageQueue;
+namespace Tgs.Payment.MalakiPay.MessageQueue;
 
 internal class DepositProcessor : IMessageProcessor
 {
-	private readonly TuPaySerializer _tuPaySerializer;
+	private readonly MalakiPaySerializer _tuPaySerializer;
 	private readonly TuPayClient _tuPayClient;
 	private readonly TuPayOptions _options;
 
-	public DepositProcessor(TuPaySerializer tuPaySerializer, IOptions<TuPayOptions> tuPayOptionsAccessor, TuPayClient tuPayClient)
+	public DepositProcessor(MalakiPaySerializer tuPaySerializer, IOptions<TuPayOptions> tuPayOptionsAccessor, TuPayClient tuPayClient)
 	{
 		_tuPaySerializer = tuPaySerializer ?? throw new ArgumentNullException(nameof(tuPaySerializer));
 		_tuPayClient = tuPayClient ?? throw new ArgumentNullException(nameof(tuPayClient));
@@ -22,7 +22,7 @@ internal class DepositProcessor : IMessageProcessor
 	{
 		var request = DepositRequest.Parser.ParseFrom(data.Span);
 
-		var settings = _tuPaySerializer.Deserialize<TuPayDepositSettings>(request.ApplyInfo)!;
+		var settings = _tuPaySerializer.Deserialize<MalakiPayDepositSettings>(request.ApplyInfo)!;
 
 		var order = new TuPayClientDepositOrder(
 			decimal.Parse(request.Amount),
@@ -37,9 +37,9 @@ internal class DepositProcessor : IMessageProcessor
 
 		var createdTime = DateTimeOffset.FromUnixTimeSeconds(depositResponse.CreatedTimestamp).LocalDateTime;
 
-		var applyInfo = new TuPayDepositApplyInfo(
+		var applyInfo = new MalakiPayDepositApplyInfo(
 			settings,
-			new TuPayDepositResponse(
+			new MalakiPayDepositResponse(
 				depositResponse.TradeNo,
 				depositResponse.Amount,
 				depositResponse.DiscountAmount,

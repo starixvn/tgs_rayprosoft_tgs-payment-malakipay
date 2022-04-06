@@ -1,6 +1,6 @@
 ﻿using Tgs.Payment.Clients;
 
-namespace Tgs.Payment.TuPay;
+namespace Tgs.Payment.MalakiPay;
 
 public record WithdrawForm(
 	Guid Id,
@@ -11,5 +11,5 @@ public record WithdrawForm(
 	decimal Amount,
 	PaymentFlowState Status,
 	Guid BankInfoId,
-	TuPayWithdrawApplyInfo? ApplyInfo,
+	MalakiPayWithdrawApplyInfo? ApplyInfo,
 	string? PaymentReturn = null);

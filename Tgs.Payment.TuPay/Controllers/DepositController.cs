@@ -1,10 +1,11 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Tgs.Payment.Clients;
-using Tgs.Payment.TuPay.ApplicationServices;
 using Tgs.ServiceUtility;
+using Tgs.Payment.MalakiPay.ApplicationServices;
+using Tgs.Payment.MalakiPay;
 
-namespace Tgs.Payment.TuPay.Controllers;
+namespace Tgs.Payment.MalakiPay.Controllers;
 
 [Route("[controller]")]
 [ApiController]
@@ -24,7 +25,7 @@ public class DepositController : ControllerBase
 		[FromServices] TuPayHasher hasher,
 		[FromServices] IGetService<GetDepositFormQuery, DepositForm?> getFormService,
 		[FromServices] IPaymentServiceClient paymentServiceClient,
-		[FromServices] TuPaySerializer tuPaySerializer,
+		[FromServices] MalakiPaySerializer tuPaySerializer,
 		[FromServices] IPaymentClient paymentClient,
 		[FromForm] IFormCollection formData)
 	{
@@ -33,7 +34,7 @@ public class DepositController : ControllerBase
 			new DateTimeOffset(unspecifyPayDate, TimeSpan.FromHours(7)).UtcDateTime,
 			DateTimeKind.Utc);
 
-		var paymentReturn = new TuPayDepositReturn(
+		var paymentReturn = new MalakiPayDepositReturn(
 			formData["tradeno"],
 			Guid.Parse(formData["outtradeno"]),
 			decimal.Parse(formData["amount"]),

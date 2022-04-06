@@ -4,15 +4,15 @@
 		<TargetFrameworks>net6.0;net5.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Tgs.Payment.TuPay</RootNamespace>
+		<RootNamespace>Tgs.Payment.MalakiPay</RootNamespace>
 		<LangVersion>10</LangVersion>
-		<PackageId>Tgs.Payment.TuPay.Client</PackageId>
+		<PackageId>Tgs.Payment.MalakiPay.Client</PackageId>
 		<Version>0.0.5</Version>
 		<Authors>Raypro</Authors>
-		<Product>Tgs.Payment.TuPay.Client</Product>
+		<Product>Tgs.Payment.MalakiPay.Client</Product>
 		<PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-payment-tupay</PackageProjectUrl>
 		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-payment-tupay.git</RepositoryUrl>
-		<PackageTags>tgs payment tupay</PackageTags>
+		<PackageTags>tgs payment MalakiPay</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>

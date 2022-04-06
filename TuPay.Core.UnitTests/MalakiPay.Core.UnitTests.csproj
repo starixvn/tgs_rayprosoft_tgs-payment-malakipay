@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TuPay.Core\TuPay.Core.csproj" />
+    <ProjectReference Include="..\TuPay.Core\MalakiPay.Core.csproj" />
   </ItemGroup>
 
 </Project>
