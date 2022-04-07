@@ -120,7 +120,7 @@ spec:
       volumes:
         - name: appsettings
           configMap:
-            name: configmap-{{ include "tu-pay.fullname" . }}
+            name: configmap-{{ include "malaki-pay.fullname" . }}
         - name: diagvol
           emptyDir: {}
         - name: dumpsvol
