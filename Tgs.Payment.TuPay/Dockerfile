@@ -5,23 +5,23 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
 ARG BuildConfiguration=Release
 RUN --mount=type=secret,id=nuget,dst=/pat cp /pat ~/.nuget/NuGet/NuGet.Config
+WORKDIR /src
 COPY ["nuget.config", "."]
-COPY ["Tgs.Payment.TuPay/Tgs.Payment.TuPay.csproj", "Tgs.Payment.TuPay/"]
-COPY ["TuPay.Core/TuPay.Core.csproj", "TuPay.Core/"]
-COPY ["TuPay.Client/TuPay.Client.csproj", "TuPay.Client/"]
-RUN dotnet restore "Tgs.Payment.TuPay/Tgs.Payment.TuPay.csproj"
+COPY ["Tgs.Payment.TuPay/Tgs.Payment.MalakiPay.csproj", "Tgs.Payment.TuPay/"]
+COPY ["TuPay.Core/MalakiPay.Core.csproj", "TuPay.Core/"]
+COPY ["TuPay.Client/MalakiPay.Client.csproj", "TuPay.Client/"]
+RUN dotnet restore "Tgs.Payment.TuPay/Tgs.Payment.MalakiPay.csproj"
 COPY . .
 WORKDIR "/src/Tgs.Payment.TuPay"
-RUN dotnet build "Tgs.Payment.TuPay.csproj" -c $BuildConfiguration -o /app/build
+RUN dotnet build "Tgs.Payment.MalakiPay.csproj" -c $BuildConfiguration -o /app/build
 
 FROM build AS publish
 ARG BuildConfiguration
-RUN dotnet publish "Tgs.Payment.TuPay.csproj" -c $BuildConfiguration -o /app/publish
+RUN dotnet publish "Tgs.Payment.MalakiPay.csproj" -c $BuildConfiguration -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Tgs.Payment.TuPay.dll"]
+ENTRYPOINT ["dotnet", "Tgs.Payment.MalakiPay.dll"]
