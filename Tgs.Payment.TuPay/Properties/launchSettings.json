@@ -1,11 +1,11 @@
 {
 	"profiles": {
-		"Tgs.Payment.TuPay": {
+		"Tgs.Payment.MalakiPay": {
 			"commandName": "Project",
 			"launchBrowser": true,
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development",
-				"OTEL_SERVICE_NAME": "Payment-TuPay(local)",
+				"OTEL_SERVICE_NAME": "Payment-MalakiPay(local)",
 				"NODE_IP": "otel.rpgp.cc"
 			},
 			"applicationUrl": "https://localhost:7055;http://+:5055",

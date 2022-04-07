@@ -6,7 +6,7 @@ pipeline {
 	
 	environment {
 		BuildConfiguration="Debug"
-		ImageName="harbor.rpgp.cc/tgs/payment-tupay"
+		ImageName="harbor.rpgp.cc/tgs/payment-malakipay"
 	}
 
 	stages {
@@ -63,14 +63,14 @@ pipeline {
 		
 		stage('Push packages') {
 			steps {
-				sh 'dotnet pack -c $BuildConfiguration "TuPay.Client/TuPay.Client.csproj" --no-build'
+				sh 'dotnet pack -c $BuildConfiguration "TuPay.Client/MalakiPay.Client.csproj" --no-build'
 				sh 'dotnet nuget push "TuPay.Client/bin/$BuildConfiguration/*.nupkg" -s "raypro-baget" -k admin --skip-duplicate'
 			}
 		}
 
 		stage('Build Docker Image') {
 			steps {
-				sh 'dotnet build "Tgs.Payment.TuPay/Tgs.Payment.TuPay.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:${TAG}" --no-restore '
+				sh 'dotnet build "Tgs.Payment.TuPay/Tgs.Payment.MalakiPay.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:${TAG}" --no-restore '
 			}
 		}
 
@@ -101,7 +101,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: env.k8s_config]) {
 
-                        def resources = getResources(env.k8s_config, env.kube_ns, "payment-tupay")
+                        def resources = getResources(env.k8s_config, env.kube_ns, "payment-malakipay")
                         def dedicated = getTgsSettings(env.k8s_config, env.kube_ns, "dedicated")
                         def node_selector = getTgsSettings(env.k8s_config, env.kube_ns, "node-selector")
 
@@ -110,7 +110,7 @@ pipeline {
                         println node_selector
 
                         sh '''
-                            cat << EOF | yq e -P | helm template deployment/k8s/tu-pay \
+                            cat << EOF | yq e -P | helm template deployment/k8s/malaki-pay \
                                 -n ${kube_ns} \
                                 --name-template tgs \
                                 --set image.tag=${TAG} \
@@ -122,7 +122,7 @@ pipeline {
                             }
                         '''
                         sh '''
-                            cat << EOF | yq e -P | helm template deployment/k8s/tu-pay \
+                            cat << EOF | yq e -P | helm template deployment/k8s/malaki-pay \
                                 -n ${kube_ns} \
                                 --set image.tag=${TAG} \
                                 --name-template tgs \

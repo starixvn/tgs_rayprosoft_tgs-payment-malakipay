@@ -33,7 +33,7 @@ builder.Services
 	.AddHttpClientLoggingHandler()
 	.AddTuPay(
 		(options, _) => builder.Configuration
-			.GetSection("TuPay")
+			.GetSection("MalakiPay")
 			.Bind(options),
 		sp => sp.ResolveLoggingHandler<TuPayOptions>())
 	.AddMessageQueue()
