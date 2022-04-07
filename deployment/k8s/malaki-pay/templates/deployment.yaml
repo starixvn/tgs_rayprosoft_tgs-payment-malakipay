@@ -37,7 +37,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: OTEL_SERVICE_NAME
-              value: Payment-TuPay({{ .Release.Namespace }})
+              value: Payment-MalakiPay({{ .Release.Namespace }})
             - name: NODE_IP
               valueFrom:
                 fieldRef:
@@ -47,16 +47,16 @@ spec:
                 secretKeyRef:
                   name: tgs-connections
                   key: nats
-            - name: TuPay__PaymentApiUrl
+            - name: MalakiPay__PaymentApiUrl
               valueFrom:
                 secretKeyRef:
                   name: tgs-connections
-                  key: payment-tupay-paymentApiUrl
-            - name: TuPay__CallbackBaseUrl
+                  key: payment-malakipay-paymentApiUrl
+            - name: MalakiPay__CallbackBaseUrl
               valueFrom:
                 secretKeyRef:
                   name: tgs-connections
-                  key: payment-tupay-callback
+                  key: payment-malakipay-callback
             - name: DOTNET_DiagnosticPorts
               value: /diag/port
           ports:
