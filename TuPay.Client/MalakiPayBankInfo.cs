@@ -10,9 +10,9 @@ public class MalakiPayBankInfo
 	[JsonPropertyName("bankBranch")]
 	public string? SubBankName { get; init; }
 
-	[JsonPropertyName("bankAccount")]
+	[JsonPropertyName("phone")]
 	public string CardNo { get; init; } = default!;
 
-	[JsonPropertyName("name")]
+	[JsonPropertyName("username")]
 	public string CardName { get; init; } = default!;
 }

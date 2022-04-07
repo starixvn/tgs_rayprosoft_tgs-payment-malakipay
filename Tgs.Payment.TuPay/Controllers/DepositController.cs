@@ -1,9 +1,8 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Tgs.Payment.Clients;
-using Tgs.ServiceUtility;
 using Tgs.Payment.MalakiPay.ApplicationServices;
-using Tgs.Payment.MalakiPay;
+using Tgs.ServiceUtility;
 
 namespace Tgs.Payment.MalakiPay.Controllers;
 
