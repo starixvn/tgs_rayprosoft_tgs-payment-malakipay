@@ -63,7 +63,7 @@ internal class TuPayClient
 		var queryFormData = new Dictionary<string, string>
 		{
 			["merchant"] = merchant,
-			["outtransferno"] = outTradeNo.ToString()
+			["outtradeno"] = outTradeNo.ToString()
 		};
 
 		var querySign = _tuPayHasher.ComputeHash(secret, queryFormData);
