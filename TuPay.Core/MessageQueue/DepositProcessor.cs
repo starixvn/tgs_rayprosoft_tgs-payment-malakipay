@@ -64,7 +64,7 @@ internal class DepositProcessor : IMessageProcessor
 		await _paymentClient.ScheduleAsync(
 			"tgs.payment.malakipay.deposit.schedule.reject",
 			settings.FormId,
-			applyInfo.Response.ExpireTime.AddMinutes(10D)).ConfigureAwait(false);
+			applyInfo.Response.ExpireTime.AddMinutes(10D).ToUniversalTime()).ConfigureAwait(false);
 
 		var msg = new DepositResponse
 		{
