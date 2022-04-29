@@ -11,10 +11,10 @@ internal class TuPayClientDepositInfo
 	public string OutTradeNo { get; set; } = default!;
 
 	[JsonPropertyName("amount")]
-	public decimal Amount { get; set; }
+	public string Amount { get; set; } = default!;
 
 	[JsonPropertyName("ramount")]
-	public decimal ReceivedAmount { get; set; }
+	public string ReceivedAmount { get; set; } = default!;
 
 	[JsonPropertyName("endtime")]
 	public string PaidTime { get; set; } = default!;

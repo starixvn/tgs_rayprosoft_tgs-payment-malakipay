@@ -87,6 +87,7 @@ public class DepositController : ControllerBase
 						depositForm.BrandId,
 						paymentReturn.ReceivedAmount).ConfigureAwait(false);
 				}
+
 				break;
 
 			case "2":
@@ -103,6 +104,7 @@ public class DepositController : ControllerBase
 						depositForm.Id,
 						depositForm.BrandId).ConfigureAwait(false);
 				}
+
 				break;
 		}
 

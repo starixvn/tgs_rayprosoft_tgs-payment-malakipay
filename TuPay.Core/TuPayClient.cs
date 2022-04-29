@@ -85,10 +85,7 @@ internal class TuPayClient
 
 		var queryResponseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientDepositInfo?>>(queryBodyJson, _jsonSerializerOptions);
 
-		if (queryResponseData!.Code != 0)
-			throw new ApiFailException();
-
-		return queryResponseData.Results;
+		return queryResponseData!.Code != 0 ? throw new ApiFailException() : queryResponseData.Results;
 	}
 
 	public async Task<TuPayClientWithdrawInfo> WithdrawAsync(string merchant, string secret, TuPayClientWithdrawOrder order)

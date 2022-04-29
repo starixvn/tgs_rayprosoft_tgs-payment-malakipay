@@ -39,7 +39,7 @@ internal class DepositTimeoutHandler : IMessageHandler
 		var formId = request.FormId.ToGuid();
 
 		var depositForm = await _paymentServiceClient
-			.GetDepositFormAsync(formId)
+			.GetDepositFormAsync(formId, cancellationToken)
 			.ConfigureAwait(false);
 
 		var brandId = depositForm!.BrandId;
