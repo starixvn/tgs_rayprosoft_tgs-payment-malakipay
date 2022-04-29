@@ -17,7 +17,7 @@ internal class GetWithdrawFormQueryService : IGetService<GetWithdrawFormQuery, W
 	public async ValueTask<WithdrawForm?> GetAsync(GetWithdrawFormQuery query, CancellationToken cancellationToken = default)
 	{
 		var data = await _paymentServiceClient
-			.GetWithdrawFormAsync(query.FormId)
+			.GetWithdrawFormAsync(query.FormId, cancellationToken)
 			.ConfigureAwait(false);
 
 		return data == null

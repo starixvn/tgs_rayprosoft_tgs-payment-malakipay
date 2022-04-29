@@ -87,6 +87,7 @@ public class WithdrawController : ControllerBase
 						fsm.State,
 						serializer.Serialize(paymentReturn)).ConfigureAwait(false);
 				}
+
 				break;
 
 			case "4":
@@ -102,6 +103,7 @@ public class WithdrawController : ControllerBase
 						.RejectWithdrawAsync(withdrawForm.Id, withdrawForm.BrandId)
 						.ConfigureAwait(false);
 				}
+
 				break;
 		}
 
