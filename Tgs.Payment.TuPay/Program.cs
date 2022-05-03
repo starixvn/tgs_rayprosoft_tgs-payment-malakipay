@@ -39,14 +39,17 @@ builder.Services
 	.AddMessageQueue()
 	.AddNatsMessageQueue(natsConfig => natsConfig
 		.ConfigQueueOptions((options, _) => options.Url = builder.Configuration.GetConnectionString("Nats"))
-		.AddProcessorByType(
+		.AddProcessor(
 			ProcessorTypes.DepositProcessorType,
 			"tgs.payment.malakipay.deposit",
 			"tgs.payment.malakipay.deposit")
-		.AddProcessorByType(
+		.AddProcessor(
 			ProcessorTypes.WithdrawProcessorType,
 			"tgs.payment.malakipay.withdraw",
-			"tgs.payment.malakipay.withdraw"))
+			"tgs.payment.malakipay.withdraw")
+		.AddHandler(ProcessorTypes.DepositTimeoutHandlerType,
+			"tgs.payment.malakipay.deposit.schedule.reject",
+			"tgs.payment.malakipay.deposit.schedule.reject"))
 	.AddNatsGlobPatternExchange("*");
 
 builder.Services
