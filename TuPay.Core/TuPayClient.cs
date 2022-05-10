@@ -58,6 +58,36 @@ internal class TuPayClient
 			: responseData.Results;
 	}
 
+	public async ValueTask<TuPayClientDepositInfo?> QueryDepositFormAsync(string merchant, string secret, Guid outTradeNo)
+	{
+		var queryFormData = new Dictionary<string, string>
+		{
+			["merchant"] = merchant,
+			["outtradeno"] = outTradeNo.ToString()
+		};
+
+		var querySign = _tuPayHasher.ComputeHash(secret, queryFormData);
+		queryFormData["sign"] = querySign;
+
+		var queryReqContent = new FormUrlEncodedContent(queryFormData);
+
+		var queryResponse = await _httpClient
+			.PostAsync("/trade/query", queryReqContent)
+			.ConfigureAwait(false);
+
+		_logger.LogInformation("Withdraw Query StatusCode: {queryResponse.StatusCode}", queryResponse.StatusCode);
+
+		var queryBodyJson = await queryResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+		_logger.LogInformation("Withdraw Query Body: {queryBodyJson}", queryBodyJson);
+
+		_ = queryResponse.EnsureSuccessStatusCode();
+
+		var queryResponseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientDepositInfo?>>(queryBodyJson, _jsonSerializerOptions);
+
+		return queryResponseData!.Code != 0 ? throw new ApiFailException() : queryResponseData.Results;
+	}
+
 	public async Task<TuPayClientWithdrawInfo> WithdrawAsync(string merchant, string secret, TuPayClientWithdrawOrder order)
 	{
 		var requestFormData = new Dictionary<string, string>

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tgs.Payment.Clients;
-using Tgs.ServiceUtility;
 using Tgs.Payment.MalakiPay.ApplicationServices;
-using Tgs.Payment.MalakiPay;
+using Tgs.ServiceUtility;
+
+using WithdrawStateMachine = Stateless.StateMachine<Tgs.Payment.Clients.PaymentFlowState, Tgs.Payment.Clients.PaymentTrigger>;
 
 namespace Tgs.Payment.MalakiPay.Controllers;
 
@@ -21,8 +22,10 @@ public class WithdrawController : ControllerBase
 	public async Task<string> WithdrawCallbackAsync(
 		[FromServices] TuPayHasher hasher,
 		[FromServices] IGetService<GetWithdrawFormQuery, WithdrawForm?> getFormService,
+		[FromServices] IGetService<GetWithdrawStateMachineQuery, WithdrawStateMachine> getStateMachineService,
 		[FromServices] IPaymentServiceClient paymentServiceClient,
 		[FromServices] MalakiPaySerializer serializer,
+		[FromServices] IPaymentClient paymentClient,
 		[FromForm] IFormCollection formData)
 	{
 		static DateTime? ConvertToSystemDate(string date)
@@ -49,7 +52,7 @@ public class WithdrawController : ControllerBase
 
 		_logger.LogInformation("PaymentReturn: {paymentReturn}", paymentReturn);
 
-		if (paymentReturn.Status is not "1")
+		if (paymentReturn.Status is not ("1" or "4"))
 			return "success";
 
 		var withdrawForm = await getFormService
@@ -68,12 +71,40 @@ public class WithdrawController : ControllerBase
 		if (hash != formData["sign"].ToString())
 			return "fail";
 
-		if (withdrawForm.Status == PaymentFlowState.Approved)
+		var fsm = await getStateMachineService
+			.GetAsync(new GetWithdrawStateMachineQuery(withdrawForm.Status))
+			.ConfigureAwait(false);
+
+		switch (paymentReturn.Status)
 		{
-			await paymentServiceClient.SubmitWithdrawFormStatusAsync(
-				withdrawForm.Id,
-				PaymentFlowState.Paid,
-				serializer.Serialize(paymentReturn)).ConfigureAwait(false);
+			case "1":
+				if (fsm.CanFire(PaymentTrigger.PaymentWithdrawCompleted))
+				{
+					await fsm.FireAsync(PaymentTrigger.PaymentWithdrawCompleted).ConfigureAwait(false);
+
+					await paymentServiceClient.SubmitWithdrawFormStatusAsync(
+						withdrawForm.Id,
+						fsm.State,
+						serializer.Serialize(paymentReturn)).ConfigureAwait(false);
+				}
+
+				break;
+
+			case "4":
+				if (fsm.CanFire(PaymentTrigger.Reject))
+				{
+					await fsm.FireAsync(PaymentTrigger.Reject).ConfigureAwait(false);
+
+					await paymentServiceClient.SubmitWithdrawFormStatusAsync(
+						withdrawForm.Id,
+						paymentReturn: serializer.Serialize(paymentReturn)).ConfigureAwait(false);
+
+					await paymentClient
+						.RejectWithdrawAsync(withdrawForm.Id, withdrawForm.BrandId)
+						.ConfigureAwait(false);
+				}
+
+				break;
 		}
 
 		return "success";

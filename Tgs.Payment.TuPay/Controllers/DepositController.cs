@@ -4,6 +4,8 @@ using Tgs.Payment.Clients;
 using Tgs.Payment.MalakiPay.ApplicationServices;
 using Tgs.ServiceUtility;
 
+using DepositStateMachine = Stateless.StateMachine<Tgs.Payment.Clients.PaymentFlowState, Tgs.Payment.Clients.PaymentTrigger>;
+
 namespace Tgs.Payment.MalakiPay.Controllers;
 
 [Route("[controller]")]
@@ -23,6 +25,7 @@ public class DepositController : ControllerBase
 	public async Task<string> DepositCallbackAsync(
 		[FromServices] TuPayHasher hasher,
 		[FromServices] IGetService<GetDepositFormQuery, DepositForm?> getFormService,
+		[FromServices] IGetService<GetDepositStateMachineQuery, DepositStateMachine> getStateMachineService,
 		[FromServices] IPaymentServiceClient paymentServiceClient,
 		[FromServices] MalakiPaySerializer tuPaySerializer,
 		[FromServices] IPaymentClient paymentClient,
@@ -45,7 +48,7 @@ public class DepositController : ControllerBase
 
 		_logger.LogInformation("PaymentReturn: {paymentReturn}", paymentReturn);
 
-		if (paymentReturn.Status is not "1")
+		if (paymentReturn.Status is not ("1" or "2" or "4"))
 			return "success";
 
 		var depositForm = await getFormService
@@ -64,16 +67,45 @@ public class DepositController : ControllerBase
 		if (hash != formData["sign"].ToString())
 			return "fail";
 
-		if (depositForm.Status < PaymentFlowState.WaitApprove)
-		{
-			await paymentServiceClient.SubmitDepositFormStatusAsync(
-				depositForm.Id,
-				paymentReturn: tuPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
+		var fsm = await getStateMachineService
+			.GetAsync(new GetDepositStateMachineQuery(depositForm.Status))
+			.ConfigureAwait(false);
 
-			await paymentClient.ApproveDepositAsync(
-				depositForm.Id,
-				depositForm.BrandId,
-				paymentReturn.ReceivedAmount).ConfigureAwait(false);
+		switch (paymentReturn.Status)
+		{
+			case "1":
+				if (fsm.CanFire(PaymentTrigger.Approve))
+				{
+					await fsm.FireAsync(PaymentTrigger.Approve).ConfigureAwait(false);
+
+					await paymentServiceClient.SubmitDepositFormStatusAsync(
+						depositForm.Id,
+						paymentReturn: tuPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
+
+					await paymentClient.ApproveDepositAsync(
+						depositForm.Id,
+						depositForm.BrandId,
+						paymentReturn.ReceivedAmount).ConfigureAwait(false);
+				}
+
+				break;
+
+			case "2":
+			case "4":
+				if (fsm.CanFire(PaymentTrigger.Reject))
+				{
+					await fsm.FireAsync(PaymentTrigger.Reject).ConfigureAwait(false);
+
+					await paymentServiceClient.SubmitDepositFormStatusAsync(
+						depositForm.Id,
+						paymentReturn: tuPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
+
+					await paymentClient.RejectDepositAsync(
+						depositForm.Id,
+						depositForm.BrandId).ConfigureAwait(false);
+				}
+
+				break;
 		}
 
 		return "success";

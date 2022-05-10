@@ -1,18 +1,25 @@
 ﻿using Google.Protobuf;
 using Microsoft.Extensions.Options;
 using Tgs.MessageQueue;
+using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
 
 namespace Tgs.Payment.MalakiPay.MessageQueue;
 
 internal class DepositProcessor : IMessageProcessor
 {
+	private readonly IPaymentClient _paymentClient;
 	private readonly MalakiPaySerializer _tuPaySerializer;
 	private readonly TuPayClient _tuPayClient;
 	private readonly TuPayOptions _options;
 
-	public DepositProcessor(MalakiPaySerializer tuPaySerializer, IOptions<TuPayOptions> tuPayOptionsAccessor, TuPayClient tuPayClient)
+	public DepositProcessor(
+		IPaymentClient paymentClient,
+		MalakiPaySerializer tuPaySerializer,
+		IOptions<TuPayOptions> tuPayOptionsAccessor,
+		TuPayClient tuPayClient)
 	{
+		_paymentClient = paymentClient ?? throw new ArgumentNullException(nameof(paymentClient));
 		_tuPaySerializer = tuPaySerializer ?? throw new ArgumentNullException(nameof(tuPaySerializer));
 		_tuPayClient = tuPayClient ?? throw new ArgumentNullException(nameof(tuPayClient));
 		_options = tuPayOptionsAccessor.Value;
@@ -53,6 +60,11 @@ internal class DepositProcessor : IMessageProcessor
 				createdTime,
 				createdTime.AddSeconds(depositResponse.Timeout),
 				depositResponse.Redirect));
+
+		await _paymentClient.ScheduleAsync(
+			"tgs.payment.malakipay.deposit.schedule.reject",
+			settings.FormId,
+			applyInfo.Response.ExpireTime.AddMinutes(10D).ToUniversalTime()).ConfigureAwait(false);
 
 		var msg = new DepositResponse
 		{
