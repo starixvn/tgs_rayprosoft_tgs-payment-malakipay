@@ -49,11 +49,16 @@ public class DepositController : ControllerBase
 		_logger.LogInformation("PaymentReturn: {paymentReturn}", paymentReturn);
 
 		if (paymentReturn.Status is not ("1" or "2" or "4"))
+		{
+			_logger.LogInformation("Ignore process, Status not match 1, 2, 4");
 			return "success";
+		}
 
 		var depositForm = await getFormService
 			.GetAsync(new GetDepositFormQuery(paymentReturn.OutTradeNo))
 			.ConfigureAwait(false);
+
+		_logger.LogInformation("Form: {depositForm}", depositForm);
 
 		if (depositForm is null)
 			return "fail";
@@ -74,9 +79,9 @@ public class DepositController : ControllerBase
 		switch (paymentReturn.Status)
 		{
 			case "1":
-				if (fsm.CanFire(PaymentTrigger.Approve))
+				if (fsm.CanFire(PaymentTrigger.PaymentDepositCompleted))
 				{
-					await fsm.FireAsync(PaymentTrigger.Approve).ConfigureAwait(false);
+					await fsm.FireAsync(PaymentTrigger.PaymentDepositCompleted).ConfigureAwait(false);
 
 					await paymentServiceClient.SubmitDepositFormStatusAsync(
 						depositForm.Id,
