@@ -79,9 +79,9 @@ public class DepositController : ControllerBase
 		switch (paymentReturn.Status)
 		{
 			case "1":
-				if (fsm.CanFire(PaymentTrigger.Approve))
+				if (fsm.CanFire(PaymentTrigger.PaymentDepositCompleted))
 				{
-					await fsm.FireAsync(PaymentTrigger.Approve).ConfigureAwait(false);
+					await fsm.FireAsync(PaymentTrigger.PaymentDepositCompleted).ConfigureAwait(false);
 
 					await paymentServiceClient.SubmitDepositFormStatusAsync(
 						depositForm.Id,
