@@ -82,6 +82,10 @@ public class WithdrawController : ControllerBase
 				{
 					await fsm.FireAsync(PaymentTrigger.PaymentWithdrawCompleted).ConfigureAwait(false);
 
+					await paymentServiceClient.SubmitWithdrawFormStatusAsync(
+						withdrawForm.Id,
+						paymentReturn: serializer.Serialize(paymentReturn)).ConfigureAwait(false);
+					
 					await paymentClient
 						.PaidWithdrawAsync(
 							withdrawForm.Id,
