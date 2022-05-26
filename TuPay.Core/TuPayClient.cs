@@ -51,11 +51,11 @@ internal class TuPayClient
 
 		_ = response.EnsureSuccessStatusCode();
 
-		var responseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientDepositResponse>>(bodyJson, _jsonSerializerOptions);
+		var responseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientDepositResponse?>>(bodyJson, _jsonSerializerOptions)!;
 
-		return responseData!.Code != 0
+		return responseData.Code != 0
 			? throw new ApiFailException()
-			: responseData.Results;
+			: responseData.Results!;
 	}
 
 	public async ValueTask<TuPayClientDepositInfo?> QueryDepositFormAsync(string merchant, string secret, Guid outTradeNo)

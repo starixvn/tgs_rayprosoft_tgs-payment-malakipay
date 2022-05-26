@@ -82,10 +82,12 @@ public class WithdrawController : ControllerBase
 				{
 					await fsm.FireAsync(PaymentTrigger.PaymentWithdrawCompleted).ConfigureAwait(false);
 
-					await paymentServiceClient.SubmitWithdrawFormStatusAsync(
-						withdrawForm.Id,
-						fsm.State,
-						serializer.Serialize(paymentReturn)).ConfigureAwait(false);
+					await paymentClient
+						.PaidWithdrawAsync(
+							withdrawForm.Id,
+							withdrawForm.BrandId,
+							HttpContext.RequestAborted)
+						.ConfigureAwait(false);
 				}
 
 				break;
