@@ -14,7 +14,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Tgs.MessageQueue.Nats" Version="2.1.5" />
-    <PackageReference Include="Tgs.Payment.Client" Version="0.4.5" />
+    <PackageReference Include="Tgs.Payment.Client" Version="0.4.6" />
   </ItemGroup>
 
   <ItemGroup>
