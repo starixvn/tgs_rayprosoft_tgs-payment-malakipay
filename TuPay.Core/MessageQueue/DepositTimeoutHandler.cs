@@ -63,12 +63,13 @@ internal class DepositTimeoutHandler : IMessageHandler
 
 		if (result?.Status is "2" or "4")
 			await _paymentClient
-				.RejectDepositAsync(formId, brandId)
+				.RejectDepositAsync(formId, brandId, cancellationToken)
 				.ConfigureAwait(false);
 		else if (result?.Status is not "1")
 			await _paymentClient.ScheduleAsync(
 				"tgs.payment.malakipay.deposit.schedule.reject",
 				formId,
-				applyInfo.Response.ExpireTime.AddMinutes(10D).ToUniversalTime()).ConfigureAwait(false);
+				applyInfo.Response.ExpireTime.AddMinutes(10D).ToUniversalTime(),
+				cancellationToken).ConfigureAwait(false);
 	}
 }
