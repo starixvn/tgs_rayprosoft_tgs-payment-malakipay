@@ -51,11 +51,11 @@ internal class TuPayClient
 
 		_ = response.EnsureSuccessStatusCode();
 
-		var responseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientDepositResponse?>>(bodyJson, _jsonSerializerOptions)!;
+		var responseData = JsonSerializer.Deserialize<TuPayJsonResponse<JsonDocument>>(bodyJson, _jsonSerializerOptions)!;
 
 		return responseData.Code != 0
-			? throw new ApiFailException()
-			: responseData.Results!;
+			? throw new ApiFailException(bodyJson)
+			: responseData.Results.Deserialize<TuPayClientDepositResponse>(_jsonSerializerOptions)!;
 	}
 
 	public async ValueTask<TuPayClientDepositInfo?> QueryDepositFormAsync(string merchant, string secret, Guid outTradeNo)
@@ -85,7 +85,7 @@ internal class TuPayClient
 
 		var queryResponseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientDepositInfo?>>(queryBodyJson, _jsonSerializerOptions);
 
-		return queryResponseData!.Code != 0 ? throw new ApiFailException() : queryResponseData.Results;
+		return queryResponseData!.Code != 0 ? throw new ApiFailException(queryBodyJson) : queryResponseData.Results;
 	}
 
 	public async Task<TuPayClientWithdrawInfo> WithdrawAsync(string merchant, string secret, TuPayClientWithdrawOrder order)
@@ -150,7 +150,7 @@ internal class TuPayClient
 		var queryResponseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientWithdrawInfo>>(queryBodyJson, _jsonSerializerOptions);
 
 		if (queryResponseData!.Code != 0)
-			throw new ApiFailException();
+			throw new ApiFailException(queryBodyJson);
 
 		var responseForm = new Dictionary<string, string>
 		{
