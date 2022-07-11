@@ -38,37 +38,50 @@ internal class DepositTimeoutHandler : IMessageHandler
 
 		var formId = request.FormId.ToGuid();
 
-		var depositForm = await _paymentServiceClient
-			.GetDepositFormAsync(formId, cancellationToken)
-			.ConfigureAwait(false);
-
-		var brandId = depositForm!.BrandId;
-
-		_logger.LogInformation(
-			"GetDepositFormAsync Form Id:{depositForm.Id}, Brand Id:{brandId}, Status:{depositForm.Status}",
-			depositForm.Id,
-			brandId,
-			depositForm.Status);
-
-		if (depositForm.Status is PaymentFlowState.Approved
-			or PaymentFlowState.Reject)
-			return;
-
-		var applyInfo = _malakiPaySerializer.Deserialize<MalakiPayDepositApplyInfo>(depositForm.ApplyInfo!)!;
-
-		var result = await _tuPayClient.QueryDepositFormAsync(
-			applyInfo.Settings.Merchant,
-			applyInfo.Settings.Secret,
-			formId).ConfigureAwait(false);
-
-		if (result?.Status is "2" or "4")
-			await _paymentClient
-				.RejectDepositAsync(formId, brandId)
+		try
+		{
+			var depositForm = await _paymentServiceClient
+				.GetDepositFormAsync(formId, cancellationToken)
 				.ConfigureAwait(false);
-		else if (result?.Status is not "1")
+
+			var brandId = depositForm!.BrandId;
+
+			_logger.LogInformation(
+				"GetDepositFormAsync Form Id:{depositForm.Id}, Brand Id:{brandId}, Status:{depositForm.Status}",
+				depositForm.Id,
+				brandId,
+				depositForm.Status);
+
+			if (depositForm.Status >= PaymentFlowState.Reject)
+				return;
+
+			var applyInfo = _malakiPaySerializer.Deserialize<MalakiPayDepositApplyInfo>(depositForm.ApplyInfo!)!;
+
+			var result = await _tuPayClient.QueryDepositFormAsync(
+				applyInfo.Settings.Merchant,
+				applyInfo.Settings.Secret,
+				formId).ConfigureAwait(false);
+
+			if (result?.Status is "2" or "4")
+				await _paymentClient
+					.RejectDepositAsync(formId, brandId, cancellationToken)
+					.ConfigureAwait(false);
+			else if (result?.Status is not "1")
+				await _paymentClient.ScheduleAsync(
+					"tgs.payment.malakipay.deposit.schedule.reject",
+					formId,
+					DateTime.UtcNow.AddMinutes(10D),
+					cancellationToken).ConfigureAwait(false);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Process deposit timeout error!");
+
 			await _paymentClient.ScheduleAsync(
 				"tgs.payment.malakipay.deposit.schedule.reject",
 				formId,
-				applyInfo.Response.ExpireTime.AddMinutes(10D).ToUniversalTime()).ConfigureAwait(false);
+				DateTime.UtcNow.AddMinutes(10D),
+				cancellationToken).ConfigureAwait(false);
+		}
 	}
 }
