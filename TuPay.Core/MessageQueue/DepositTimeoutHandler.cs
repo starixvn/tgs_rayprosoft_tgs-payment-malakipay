@@ -44,7 +44,13 @@ internal class DepositTimeoutHandler : IMessageHandler
 				.GetDepositFormAsync(formId, cancellationToken)
 				.ConfigureAwait(false);
 
-			var brandId = depositForm!.BrandId;
+			if (depositForm is null)
+			{
+				_logger.LogWarning("Deposit Form {request.FormId.ToGuid()} not found.", request.FormId.ToGuid());
+				return;
+			}
+
+			var brandId = depositForm.BrandId;
 
 			_logger.LogInformation(
 				"GetDepositFormAsync Form Id:{depositForm.Id}, Brand Id:{brandId}, Status:{depositForm.Status}",
