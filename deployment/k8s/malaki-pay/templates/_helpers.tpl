@@ -47,7 +47,7 @@ Selector labels
 */}}
 {{- define "malaki-pay.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "malaki-pay.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/instance: RELEASE-NAME
 tgs.kind: payment
 app: {{ include "malaki-pay.name" . }}
 {{- end }}
