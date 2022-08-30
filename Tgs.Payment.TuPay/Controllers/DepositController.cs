@@ -25,9 +25,8 @@ public class DepositController : ControllerBase
 	public async Task<string> DepositCallbackAsync(
 		[FromServices] TuPayHasher hasher,
 		[FromServices] IGetService<GetDepositFormQuery, DepositForm?> getFormService,
-		[FromServices] IGetService<GetDepositStateMachineQuery, DepositStateMachine> getStateMachineService,
 		[FromServices] IPaymentServiceClient paymentServiceClient,
-		[FromServices] MalakiPaySerializer tuPaySerializer,
+		[FromServices] MalakiPaySerializer malakiPaySerializer,
 		[FromServices] IPaymentClient paymentClient,
 		[FromForm] IFormCollection formData)
 	{
@@ -72,9 +71,7 @@ public class DepositController : ControllerBase
 		if (hash != formData["sign"].ToString())
 			return "fail";
 
-		var fsm = await getStateMachineService
-			.GetAsync(new GetDepositStateMachineQuery(depositForm.Status))
-			.ConfigureAwait(false);
+		var fsm = paymentServiceClient.CreateDepositStateMachine(depositForm.Status);
 
 		switch (paymentReturn.Status)
 		{
@@ -85,7 +82,7 @@ public class DepositController : ControllerBase
 
 					await paymentServiceClient.SubmitDepositFormStatusAsync(
 						depositForm.Id,
-						paymentReturn: tuPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
+						paymentReturn: malakiPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
 
 					await paymentClient.ApproveDepositAsync(
 						depositForm.Id,
@@ -103,7 +100,7 @@ public class DepositController : ControllerBase
 
 					await paymentServiceClient.SubmitDepositFormStatusAsync(
 						depositForm.Id,
-						paymentReturn: tuPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
+						paymentReturn: malakiPaySerializer.Serialize(paymentReturn)).ConfigureAwait(false);
 
 					await paymentClient.RejectDepositAsync(
 						depositForm.Id,
