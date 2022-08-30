@@ -59,11 +59,14 @@ public class WithdrawController : ControllerBase
 		if (withdrawForm == null)
 			return "fail";
 
+		var sign = formData["sign"].ToString();
 		var hash = hasher.ComputeHash(
 			withdrawForm.ApplyInfo!.Settings.Secret,
 			formData
 				.Where(kv => kv.Key != "sign")
 				.Select(kv => new KeyValuePair<string, string>(kv.Key, kv.Value)));
+
+		_logger.LogInformation("Compute hash: {hash}, sign: {sign}", hash, sign);
 
 		if (hash != formData["sign"].ToString())
 			return "fail";

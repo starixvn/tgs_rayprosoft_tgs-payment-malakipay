@@ -62,11 +62,14 @@ public class DepositController : ControllerBase
 		if (depositForm is null)
 			return "fail";
 
+		var sign = formData["sign"].ToString();
 		var hash = hasher.ComputeHash(
 			depositForm.ApplyInfo!.Settings.Secret,
 			formData
 				.Where(kv => kv.Key != "sign")
 				.Select(kv => new KeyValuePair<string, string>(kv.Key, kv.Value)));
+
+		_logger.LogInformation("Compute hash: {hash}, sign: {sign}", hash, sign);
 
 		if (hash != formData["sign"].ToString())
 			return "fail";
