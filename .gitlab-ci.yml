@@ -121,7 +121,7 @@ deploy-dev:
         -n $namespace \
         --name-template tgs \
         -f - \
-        | kubectl -n dev apply -f -
+        | kubectl -n $namespace apply -f -
       {
         "nodeSelector": $node_selector,
         "tolerations": [$dedicated],
@@ -163,7 +163,7 @@ deploy-staging:
         -n $namespace \
         --name-template tgs \
         -f - \
-        | kubectl -n dev apply -f -
+        | kubectl -n $namespace apply -f -
       {
         "nodeSelector": $node_selector,
         "tolerations": [$dedicated],
@@ -205,7 +205,7 @@ deploy-prod:
         -n $namespace \
         --name-template tgs \
         -f - \
-        | kubectl -n dev apply -f -
+        | kubectl -n $namespace apply -f -
       {
         "nodeSelector": $node_selector,
         "tolerations": [$dedicated],
