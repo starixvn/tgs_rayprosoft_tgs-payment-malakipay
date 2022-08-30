@@ -3,8 +3,6 @@ using Tgs.Payment.Clients;
 using Tgs.Payment.MalakiPay.ApplicationServices;
 using Tgs.ServiceUtility;
 
-using WithdrawStateMachine = Stateless.StateMachine<Tgs.Payment.Clients.PaymentFlowState, Tgs.Payment.Clients.PaymentTrigger>;
-
 namespace Tgs.Payment.MalakiPay.Controllers;
 
 [Route("[controller]")]
@@ -22,7 +20,6 @@ public class WithdrawController : ControllerBase
 	public async Task<string> WithdrawCallbackAsync(
 		[FromServices] TuPayHasher hasher,
 		[FromServices] IGetService<GetWithdrawFormQuery, WithdrawForm?> getFormService,
-		[FromServices] IGetService<GetWithdrawStateMachineQuery, WithdrawStateMachine> getStateMachineService,
 		[FromServices] IPaymentServiceClient paymentServiceClient,
 		[FromServices] MalakiPaySerializer serializer,
 		[FromServices] IPaymentClient paymentClient,
@@ -62,18 +59,19 @@ public class WithdrawController : ControllerBase
 		if (withdrawForm == null)
 			return "fail";
 
+		var sign = formData["sign"].ToString();
 		var hash = hasher.ComputeHash(
 			withdrawForm.ApplyInfo!.Settings.Secret,
 			formData
 				.Where(kv => kv.Key != "sign")
 				.Select(kv => new KeyValuePair<string, string>(kv.Key, kv.Value)));
 
+		_logger.LogInformation("Compute hash: {hash}, sign: {sign}", hash, sign);
+
 		if (hash != formData["sign"].ToString())
 			return "fail";
 
-		var fsm = await getStateMachineService
-			.GetAsync(new GetWithdrawStateMachineQuery(withdrawForm.Status))
-			.ConfigureAwait(false);
+		var fsm = paymentServiceClient.CreateWithdrawStateMachine(withdrawForm.Status);
 
 		switch (paymentReturn.Status)
 		{
@@ -85,7 +83,7 @@ public class WithdrawController : ControllerBase
 					await paymentServiceClient.SubmitWithdrawFormStatusAsync(
 						withdrawForm.Id,
 						paymentReturn: serializer.Serialize(paymentReturn)).ConfigureAwait(false);
-					
+
 					await paymentClient
 						.PaidWithdrawAsync(
 							withdrawForm.Id,
