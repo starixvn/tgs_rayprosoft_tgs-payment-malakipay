@@ -195,6 +195,7 @@ deploy-prod:
         --name-template tgs \
         -f - 
       {
+        "replicaCount": 2,
         "nodeSelector": $node_selector,
         "tolerations": [$dedicated],
         "resources": $resources
@@ -207,6 +208,7 @@ deploy-prod:
         -f - \
         | kubectl -n $namespace apply -f -
       {
+        "replicaCount": 2,
         "nodeSelector": $node_selector,
         "tolerations": [$dedicated],
         "resources": $resources
