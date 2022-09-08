@@ -25,12 +25,14 @@ public static class ServiceCollectionExtensions
 			.Services
 			.RegisterAllServiceUtilityTypes(Assembly.GetExecutingAssembly(), ServiceLifetime.Transient)
 			.AddPaymentClient()
-			.AddPaymentServiceClient((options, sp) =>
-			{
-				var skyPayOptions = sp.GetRequiredService<IOptions<TuPayOptions>>().Value;
+			.AddPaymentServiceClient(httpClientBuilder => httpClientBuilder
+				.ConfigureHttpClient((sp, http) =>
+				{
+					var skyPayOptions = sp.GetRequiredService<IOptions<TuPayOptions>>().Value;
 
-				options.PaymentServiceBaseUrl = skyPayOptions.PaymentServiceBaseUrl;
-			})
+					http.BaseAddress = skyPayOptions.PaymentServiceBaseUrl;
+				})
+				.AddHttpMessageHandler(httpClientMessageHandlerFactory))
 			.AddTransient<TuPayHasher>()
 			.AddSingleton<MalakiPaySerializer>();
 }
