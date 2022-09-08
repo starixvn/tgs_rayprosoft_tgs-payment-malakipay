@@ -26,4 +26,12 @@
     <ProjectReference Include="..\Tgs.Payment.TuPay\Tgs.Payment.MalakiPay.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Users\Phoenix\source\repos\tgs-payment-malakipay\Tgs.Payment.MalakiPay.IntegrationTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Users\Phoenix\source\repos\tgs-payment-malakipay\Tgs.Payment.MalakiPay.IntegrationTests\.editorconfig" />
+  </ItemGroup>
+
 </Project>

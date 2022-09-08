@@ -90,7 +90,6 @@ public class WithdrawTests
 			.Permit(PaymentTrigger.PaymentWithdrawCompleted, PaymentFlowState.Paid)
 			.Permit(PaymentTrigger.Reject, PaymentFlowState.Reject);
 
-
 		_ = fakePaymentServiceClient.CreateWithdrawStateMachine(Arg.Is(PaymentFlowState.Approved))
 			.Returns(fsm);
 

@@ -92,7 +92,7 @@ public class DepositTests
 			.Permit(PaymentTrigger.Approve, PaymentFlowState.Approved)
 			.Permit(PaymentTrigger.Reject, PaymentFlowState.Reject);
 
-		fakePaymentServiceClient.CreateDepositStateMachine(Arg.Is(PaymentFlowState.WaitPayment))
+		_ = fakePaymentServiceClient.CreateDepositStateMachine(Arg.Is(PaymentFlowState.WaitPayment))
 			.Returns(fsm);
 
 		var requestContent = new FormUrlEncodedContent(formDict);

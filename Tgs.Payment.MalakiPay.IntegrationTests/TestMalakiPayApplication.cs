@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Exporter;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Tgs.Payment.MalakiPay.IntegrationTests;
 
@@ -24,11 +24,7 @@ internal class TestMalakiPayApplication : WebApplicationFactory<Program>
 			.AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
 				sp => new ConfigureNamedOptions<OtlpExporterOptions>(
 					Options.DefaultName,
-					exporterOptions =>
-					{
-						exporterOptions.TimeoutMilliseconds = 0;
-					})));
-
+					exporterOptions => exporterOptions.TimeoutMilliseconds = 0)));
 
 		_webHostConfigure?.Invoke(builder);
 	}
