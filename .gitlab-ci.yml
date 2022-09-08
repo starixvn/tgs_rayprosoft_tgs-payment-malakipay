@@ -6,7 +6,9 @@ stages:
   - build
   - test
   - publish
-  - deploy
+  - deploy-dev
+  - deploy-staging
+  - deploy-prod
 
 build-code:
   stage: build
@@ -91,7 +93,9 @@ deploy-dev:
   variables:
     GIT_STRATEGY: none
     namespace: dev
-  stage: deploy
+  environment:
+    name: dev
+  stage: deploy-dev
   needs:
     - push-nuget
     - push-docker-image
@@ -133,7 +137,9 @@ deploy-staging:
   variables:
     GIT_STRATEGY: none
     namespace: staging
-  stage: deploy
+  environment:
+    name: staging
+  stage: deploy-staging
   needs:
     - deploy-dev
     - job: push-k8s-template
@@ -175,7 +181,9 @@ deploy-prod:
   variables:
     GIT_STRATEGY: none
     namespace: prod
-  stage: deploy
+  environment:
+    name: prod
+  stage: deploy-prod
   needs:
     - deploy-staging
     - job: push-k8s-template
