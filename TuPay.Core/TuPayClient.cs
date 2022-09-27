@@ -124,49 +124,13 @@ internal class TuPayClient
 		if (responseData!.Code != 0)
 			throw new ApiFailException();
 
-		var queryFormData = new Dictionary<string, string>
+		return new TuPayClientWithdrawInfo
 		{
-			["merchant"] = merchant,
-			["outtransferno"] = order.OutTradeNo.ToString()
+			OutTradeNo = order.OutTradeNo,
+			TransferNo = order.OutTradeNo.ToString(),
+			TradeAmount = order.Amount,
+			TransferAmount = order.Amount,
+			Status = 2
 		};
-
-		var querySign = _tuPayHasher.ComputeHash(secret, queryFormData);
-		queryFormData["sign"] = querySign;
-
-		var queryReqContent = new FormUrlEncodedContent(queryFormData);
-
-		var queryResponse = await _httpClient
-			.PostAsync("/transfer/query", queryReqContent)
-			.ConfigureAwait(false);
-
-		_logger.LogInformation("Withdraw Query StatusCode: {queryResponse.StatusCode}", queryResponse.StatusCode);
-
-		var queryBodyJson = await queryResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-		_logger.LogInformation("Withdraw Query Body: {queryBodyJson}", queryBodyJson);
-
-		_ = queryResponse.EnsureSuccessStatusCode();
-
-		var queryResponseData = JsonSerializer.Deserialize<TuPayJsonResponse<TuPayClientWithdrawInfo>>(queryBodyJson, _jsonSerializerOptions);
-
-		if (queryResponseData!.Code != 0)
-			throw new ApiFailException(queryBodyJson);
-
-		var responseForm = new Dictionary<string, string>
-		{
-			["transferno"] = queryResponseData.Results.TransferNo,
-			["outtransferno"] = order.OutTradeNo.ToString(),
-			["tradeamount"] = queryResponseData.Results.TradeAmount.ToString(),
-			["transferamount"] = queryResponseData.Results.TransferAmount.ToString(),
-			["endtime"] = queryResponseData.Results.PayTime ?? string.Empty,
-			["remark"] = queryResponseData.Results.Remark ?? string.Empty,
-			["status"] = queryResponseData.Results.Status.ToString(),
-		};
-
-		var responseSign = _tuPayHasher.ComputeHash(secret, responseForm);
-
-		return queryResponseData.Results.Sign != responseSign
-			? throw new ApiFailException("Query withdraw sign invalid.")
-			: queryResponseData.Results;
 	}
 }
