@@ -75,4 +75,27 @@ public class HashTests
 
 		Assert.AreEqual(expected, actual);
 	}
+
+	[TestMethod]
+	public void Withdraw_Data_Hash2Test()
+	{
+		var dict = new Dictionary<string, string>
+		{
+			["endtime"] = "2022-09-30 09:13:30",
+			["outtransferno"] = "27c5ca41-c5b7-4214-b03b-6d2bfb8ed01e",
+			["remark"] = "error:transfer failError: 訂單已經提交，頁面未跳轉到成功也有，請到 GCASH APP 上檢查是否已經出款(The order has been submitted, but the page does not jump to success, please go to the GCASH APP to check whether the payment has been successed)操作人:Adam",
+			["status"] = "1",
+			["tradeamount"] = "303",
+			["transferamount"] = "300",
+			["transferno"] = "087476514f90408aa2efee51d3ab86bd",
+		};
+
+		var sut = new TuPayHasher(NullLogger<TuPayHasher>.Instance);
+
+		var expected = "19f7429c674546d6ec9a01190dd7f442";
+
+		var actual = sut.ComputeHash("28ac492de45f44ccb7b7d700e5a82928", dict);
+
+		Assert.AreEqual(expected, actual);
+	}
 }
