@@ -1,8 +1,6 @@
-﻿using System.Net;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using Microsoft.Extensions.Logging;
 
 namespace Tgs.Payment.MalakiPay;
@@ -21,7 +19,7 @@ public class TuPayHasher
 		var content = string.Join(
 			"&",
 			dict.OrderBy(kvp => kvp.Key)
-				.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value?.ToString() ?? string.Empty).Replace("%20", "+").ToLower()}"));
+				.Select(p => $"{p.Key}={Flurl.Url.Encode(p.Value?.ToString() ?? string.Empty, true).ToLower()}"));
 
 		var fullText = $"{content}&secret={secret}";
 
