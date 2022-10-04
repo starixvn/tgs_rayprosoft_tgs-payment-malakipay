@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using Microsoft.Extensions.Logging;
 
 namespace Tgs.Payment.MalakiPay;
@@ -20,14 +19,15 @@ public class TuPayHasher
 		var content = string.Join(
 			"&",
 			dict.OrderBy(kvp => kvp.Key)
-				.Select(p => $"{p.Key}={HttpUtility.UrlEncode(p.Value?.ToString() ?? string.Empty).ToLower()}"));
+				.Select(p => $"{p.Key}={Flurl.Url.Encode(p.Value?.ToString() ?? string.Empty, true).ToLower()}"));
 
 		var fullText = $"{content}&secret={secret}";
 
 		_logger.LogTrace("FullText: {fullText}", fullText);
 
-		var hashData = MD5.HashData(Encoding.UTF8.GetBytes(fullText));
-		var hash = new BigInteger(MD5.HashData(Encoding.UTF8.GetBytes(fullText)), isBigEndian: true).ToString("x32");
+		var hash = new BigInteger(
+			MD5.HashData(Encoding.UTF8.GetBytes(fullText)),
+			isBigEndian: true).ToString("x32");
 
 		_logger.LogTrace("Hash: {hash}", hash);
 
