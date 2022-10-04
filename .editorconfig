@@ -1,5 +1,6 @@
-# 如果要從更高的目錄繼承 .editorconfig 設定，請移除以下行
+﻿# 如果要從更高的目錄繼承 .editorconfig 設定，請移除以下行
 root = true
+charset = utf-8-bom
 
 # C# 檔案
 [*.cs]

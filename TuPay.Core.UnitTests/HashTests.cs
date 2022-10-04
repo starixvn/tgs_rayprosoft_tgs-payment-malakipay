@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tgs.Payment.MalakiPay;
@@ -83,13 +83,14 @@ public class HashTests
 		{
 			["endtime"] = "2022-09-30 09:13:30",
 			["outtransferno"] = "27c5ca41-c5b7-4214-b03b-6d2bfb8ed01e",
-			["remark"] = "error:transfer failError: ­q³æ¤w¸g´£¥æ¡A­¶­±¥¼¸õÂà¨ì¦¨¥\¤]¦³¡A½Ğ¨ì GCASH APP ¤WÀË¬d¬O§_¤w¸g¥X´Ú(The order has been submitted, but the page does not jump to success, please go to the GCASH APP to check whether the payment has been successed)¾Ş§@¤H:Adam",
+			["remark"] = "error:transfer failError: è¨‚å–®å·²ç¶“æäº¤ï¼Œé é¢æœªè·³è½‰åˆ°æˆåŠŸä¹Ÿæœ‰ï¼Œè«‹åˆ° GCASH APP ä¸Šæª¢æŸ¥æ˜¯å¦å·²ç¶“å‡ºæ¬¾(The order has been submitted, but the page does not jump to success, please go to the GCASH APP to check whether the payment has been successed)æ“ä½œäºº:Adam",
 			["status"] = "1",
 			["tradeamount"] = "303",
 			["transferamount"] = "300",
 			["transferno"] = "087476514f90408aa2efee51d3ab86bd",
 		};
 
+		System.Console.WriteLine(dict["remark"]);
 		var sut = new TuPayHasher(NullLogger<TuPayHasher>.Instance);
 
 		var expected = "19f7429c674546d6ec9a01190dd7f442";
